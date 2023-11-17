@@ -22,17 +22,24 @@ app.get('/api', (req, res) => {
 // get all pets from the database
 app.get('/api/v1/pets', (req, res) => {
     // send the pets array as a response
-    res.sendFile(__dirname + '/data.js')
+    res.send(pets)
 
 });
 
 // get pet by owner with query string
 app.get('/api/v1/pets/owner', (req, res) => {
     // get the owner from the request
+    const { owner } = req.query;
 
 
     // find the pet in the pets array
-    const pet = pets.find(pet => pet.owner === owner);
+
+    if (!owner) {
+        res.send("You must include a ?owner=[Owner-name]")
+    }
+    const pet = pets.filter(
+        (pet) => pet.owner.toLowerCase() === owner.toLowerCase()
+    );
 
     // send the pet as a response
 
